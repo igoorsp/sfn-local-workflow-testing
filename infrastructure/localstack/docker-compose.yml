@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"  # Porta padrão do LocalStack
+      - "8080:8080"  # Porta da interface web (opcional)
+    environment:
+      - SERVICES=sqs,lambda,stepfunctions,dynamodb,s3,events,sts  # Adicione 'lambda' aqui
+      - DEFAULT_REGION=us-east-1
+      - DEBUG=1
+    volumes:
+      - ./localstack-data:/tmp/localstacks  # Persistência de dados

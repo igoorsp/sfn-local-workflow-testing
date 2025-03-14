@@ -1,0 +1,58 @@
+{
+    "Comment": "Exemplo Step Functions com Callback Pattern e condicionais",
+    "StartAt": "EnviaParaSQS",
+    "States": {
+      "EnviaParaSQS": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::sqs:sendMessage.waitForTaskToken",
+        "Parameters": {
+          "QueueUrl": "http://localhost:4566/000000000000/SQSQueue1",
+          "MessageBody": {
+            "executionId.$": "$$.Execution.Id",
+            "taskToken.$": "$$.Task.Token",
+            "executionStartTime.$": "$$.Execution.StartTime",
+            "businessKey.$": "$.businessKey"
+          }
+        },
+        "Next": "VerificaResultado",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.TaskFailed"
+            ],
+            "Next": "FalhaCallback"
+          }
+        ],
+        "TimeoutSeconds": 240
+      },
+      "VerificaResultado": {
+        "Type": "Choice",
+        "Choices": [
+          {
+            "Variable": "$.result",
+            "StringEquals": "APPROVED",
+            "Next": "Approved"
+          },
+          {
+            "Variable": "$.result",
+            "StringEquals": "REJECTED",
+            "Next": "Rejected"
+          }
+        ]
+      },
+      "Approved": {
+        "Type": "Pass",
+        "Comment": "Trate aqui a lógica de sucesso APPROVED",
+        "End": true
+      },
+      "Rejected": {
+        "Type": "Pass",
+        "Comment": "Trate aqui a lógica de REJECTED",
+        "End": true
+      },
+      "FalhaCallback": {
+        "Type": "Fail",
+        "Cause": "Falha no callback (SendTaskFailure)"
+      }
+    }
+  }
