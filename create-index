@@ -1,0 +1,12 @@
+aws dynamodb update-table \
+    --table-name human-task-control \
+    --attribute-definitions AttributeName=status,AttributeType=S \
+    --global-secondary-index-updates '[{
+        "Create": {
+            "IndexName": "StatusIndex",
+            "KeySchema": [{"AttributeName":"status","KeyType":"HASH"}],
+            "Projection": {"ProjectionType":"ALL"},
+            "ProvisionedThroughput": {"ReadCapacityUnits":5,"WriteCapacityUnits":5}
+        }
+    }]' \
+    --endpoint-url=http://localhost:4566
