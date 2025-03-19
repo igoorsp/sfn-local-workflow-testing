@@ -1,5 +1,3 @@
-(Due to technical issues, the search service is temporarily unavailable.)
-
 # Limitações e Dificuldades na Implementação do LocalStack para Simular Ambientes com AWS Step Functions
 
 O **LocalStack** é uma ferramenta poderosa para simular serviços da AWS localmente, incluindo o **AWS Step Functions**. No entanto, ao implementar um ambiente com Step Functions usando o LocalStack, existem limitações e desafios que podem surgir, dependendo da complexidade do cenário. Abaixo, discutimos essas questões em três níveis de complexidade: **cenários simples**, **intermediários** e **complexos**.
